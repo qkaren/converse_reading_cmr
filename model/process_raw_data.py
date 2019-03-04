@@ -235,23 +235,3 @@ def combine_files(files_path, anc_type='section', fact_len=12, just_anc=False, i
     print('there are {} count_short_facts'.format(count_short_facts))
     print('the percentage of count_short_facts is {0:.2f}%'.format(count_short_facts / len(data_list) * 100))
     return data_list
-
-
-def main():
-    path = './data_processing/raw_data_1010/'
-    output_path = './tf11/'
-    # output_path = './'
-    anc_type = 'section'
-    fact_len = 12  # if not just_anchor
-    just_anc = True
-    is_train = True
-    # for x in ('dev', 'test'):  #'train'
-    #     if x == 'test':
-    #         is_train = False
-    data = combine_files(
-            path + 'dev', anc_type, fact_len, just_anc, is_train)
-    write_files(output_path + 'dev', data)
-
-
-if __name__ == '__main__':
-    main()

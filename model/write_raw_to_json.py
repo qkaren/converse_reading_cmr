@@ -66,18 +66,18 @@ def build_vocab(data):
             fin.write(str(x) + '\n')
     return vocab
 
-def build_data(data, vocab, vocab_tag, vocab_ner, fout, is_train):
+def build_data(data, vocab, fout):
     with open(fout, 'w', encoding='utf-8') as writer:
         dropped_sample = 0
         for sample in data:
-            fd = feature_func(sample, vocab, vocab_tag, vocab_ner, is_train)
+            fd = feature_func(sample, vocab)
             if fd is None:
                 dropped_sample += 1
                 continue
             writer.write('{}\n'.format(json.dumps(fd)))
         logger.info('dropped {} in total {}'.format(dropped_sample, len(data)))
 
-def feature_func(sample, vocab, vocab_tag, vocab_ner, is_train=True):
+def feature_func(sample, vocab):
     query_tokend = sample['query']
     doc_tokend = sample['fact']
     answer_tokend = sample['response']
@@ -91,30 +91,25 @@ def feature_func(sample, vocab, vocab_tag, vocab_ner, is_train=True):
     # TODO
     fea_dict['query_tok'] = tok_func(query_tokend, vocab)
 
-    fea_dict['query_pos'] = [] #postag_func(query_tokend, vocab_tag)
-    fea_dict['query_ner'] = [] #nertag_func(query_tokend, vocab_ner)
+    fea_dict['query_pos'] = []
+    fea_dict['query_ner'] = []
   
     # TODO
     fea_dict['doc_tok'] = tok_func(doc_tokend, vocab)
-    #fea_dict['doc_tok'] = doc_tokend
 
-    fea_dict['doc_pos'] = [] #postag_func(doc_tokend, vocab_tag)
-    fea_dict['doc_ner'] = [] #nertag_func(doc_tokend, vocab_ner)
-    fea_dict['doc_fea'] = '' #'{}'.format(match_func(query_tokend, doc_tokend)) # json don't support float
+    fea_dict['doc_pos'] = []
+    fea_dict['doc_ner'] = []
+    fea_dict['doc_fea'] = ''
 
     # TODO
     fea_dict['answer_tok'] = tok_func(answer_tokend, vocab)
 
-    #fea_dict['answer_tok'] = answer_tokend
 
-    if len(fea_dict['query_tok']) == 0: 
-        # TODO(0911)
+    if len(fea_dict['query_tok']) == 0:
         fea_dict['query_tok'] = [0]
     if len(fea_dict['doc_tok']) == 0:
-        # TODO(0911)
         fea_dict['doc_tok'] = [0]
     if len(fea_dict['answer_tok']) ==0:
-        # TODO(0911)
         fea_dict['answer_tok'] = [0]
                 
     return fea_dict
@@ -137,56 +132,47 @@ def main():
     logger.info('{}-dim word vector path: {}'.format(args.glove_dim, args.glove))
     glove_path = args.glove
     glove_dim = args.glove_dim
-    nlp = spacy.load('en', parser=False)
     set_environment(args.seed)
 
     # load data
-    # train_data = load_reddit_data(train_path, anc_type='section',
-	# fact_len = 12, just_anc = False, is_train = True)
+    train_data = load_reddit_data(train_path, anc_type='section',
+	fact_len = 12, just_anc = False, is_train = True)
     valid_data = load_reddit_data(valid_path,anc_type='section',
 	fact_len = 12, just_anc = False, is_train = False)
     test_data = load_reddit_data(test_path, anc_type='section',
     fact_len=12, just_anc = False, is_train=False)
-    # logger.info('#train data: {}'.format(len(train_data)))
+    logger.info('#train data: {}'.format(len(train_data)))
     logger.info('#valid data: {}'.format(len(valid_data)))
     logger.info('#test data: {}'.format(len(test_data)))
-
-    vocab_tag = Vocabulary.build(nlp.tagger.tag_names, neat=True)
-    vocab_ner = Vocabulary.build([''] + nlp.entity.cfg[u'actions']['1'], neat=True)
-    #vocab = load_vocab(vocab_path)
     meta_path = os.path.join(args.data_dir, args.meta)
 
     if not os.path.exists(meta_path):
         logger.info('Build vocabulary')
         vocab = build_vocab(train_data + valid_data)
-        # vocab = build_vocab(valid_data)
         logger.info('building embedding')
         embedding = build_embedding(glove_path, vocab, glove_dim)
         logger.info('emb done')
-        meta = {'vocab': vocab, 'vocab_tag': vocab_tag, 'vocab_ner': vocab_ner, 'embedding': embedding}
+        meta = {'vocab': vocab, 'embedding': embedding}
         with open(meta_path, 'wb') as f:
             pickle.dump(meta, f)
     else:
         with open(meta_path, 'rb') as f:
             meta = pickle.load(f)
             vocab = meta['vocab']
-            vocab_tag = meta['vocab_tag']
-            vocab_ner = meta['vocab_ner']
-            embedding = meta['embedding']
 
     train_fout = os.path.join(args.data_dir, args.train_data)
-    build_data(train_data, vocab, vocab_tag, vocab_ner, train_fout, True)
+    build_data(train_data, vocab, train_fout)
     logger.info('train data done')
 
     dev_fout = os.path.join(args.data_dir, args.dev_data)
-    build_data(valid_data, vocab, vocab_tag, vocab_ner, dev_fout, False)
+    build_data(valid_data, vocab, dev_fout)
     logger.info('valid data done')
 
     test_fout = os.path.join(args.data_dir, args.test_data)
-    build_data(test_data, vocab, vocab_tag, vocab_ner, test_fout, False)
+    build_data(test_data, vocab, test_fout)
     logger.info('test data done')
 
-    # write_files(args.data_dir + '/train', train_data)
+    write_files(args.data_dir + '/train', train_data)
     write_files(args.data_dir + '/dev', valid_data)
     write_files(args.data_dir + '/test', test_data)
 
