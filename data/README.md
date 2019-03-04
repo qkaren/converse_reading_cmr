@@ -1,5 +1,4 @@
-# Data Extraction pipline for "Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading", ACL 2019 submission, anonymous authors.
-# Confidential, please do not redistribute.
+# Data Extraction Pipline
 
 ## Overview
 
