@@ -2,8 +2,8 @@ We will clean up and document code in final version.
 
 ## Run the code
 
-**1)Download data/covec**
-* Run `sh download.sh`
+**1)Process data**
+* Run `sh run_preprocessing.sh`
 
 **2) Start Docker**
 

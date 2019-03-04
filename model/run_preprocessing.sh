@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# process raw data to json file
 CUDA_VISIBLE_DEVICES=0 \
 python3 write_raw_to_json.py \
     --data_dir './data' --train_data train.json \
@@ -7,3 +8,5 @@ python3 write_raw_to_json.py \
     --raw_data_dir './raw_data/' \
     --log_file './log/data_processing'
 
+# download cove
+sh download.sh
