@@ -9,7 +9,7 @@ We will clean up and document code in final version.
 
 Before training and testing, run `sh launch_san_docker.sh` first to enter the docker.
 (if you don't have docker on your machine, please run:
-sudo curl -sSL https://get.docker.com/ | sh
+`sudo curl -sSL https://get.docker.com/ | sh`
 )
 
 **3)Test the model**
