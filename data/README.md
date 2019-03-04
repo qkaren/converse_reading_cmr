@@ -1,9 +1,13 @@
 # Data Extraction pipline for "Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading", ACL 2019 submission, anonymous authors.
 # Confidential, please do not redistribute.
 
+## Overview
+
 We use conversational data extracted from Reddit. Each conversation in this setup is _grounded_, as each conversation in this data is about a specific web page that was linked at the start of the conversation. This page provides code to extract the data from a Reddit [dump](http://files.pushshift.io/reddit/comments/) and from [Common Crawl](http://commoncrawl.org/). The former data provides the conversation, while the latter offers the grounding. We provide code instead of actual data, as we are unable to directly release this data.
 
 If you run into any problem creating the data, please check the FAQ below. Otherwise, feel free to contact us at: (email address retracted for the submision.) (if so, please email us a zip file of all the log files in the `logs` directory).
+
+Note: this is a relatively long page, but only the 'Requirements' and 'Data Creation' sections are really needed. The rest is supplementary materials (samples, data statistics, etc.)
 
 ## Requirements
 
@@ -22,7 +26,7 @@ To install the above Python modules, you can run:
 Please also run set `PYTHONIOENCODING=UTF-8` in your environment, e.g., by running this in bash:
 ```export PYTHONIOENCODING=UTF-8``
 
-## Create official data (train and dev):
+## Data Creation
 
 First, make sure that Python and all required modules are installed, for example by generating a subset of the data (January 2011):
 
