@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+# Prints unigram and bigram diversity of text read from stdin.
+# (optional script, you don't need this to run the pipeline)
+
+use strict;
+use POSIX;
+use Fatal qw(open close);
+
+use utf8;
+binmode(STDIN,":utf8");
+binmode(STDOUT,":utf8");
+binmode(STDERR,":utf8");
+
+
+my $now = 0;
+my $nof = 0;
+my $noc = 0;
+
+# Collect tokens:
+my (%uni,%bi);
+my ($unic,$bic) = (0,0);
+
+while(<STDIN>) { 
+	my @els = split;
+	for(my $i = 0; $i <= $#els; ++$i) { 
+		++$uni{$els[$i]}; 
+		++$unic;
+	} 
+	for(my $i = 0; $i < $#els; ++$i) { 
+		++$bi{$els[$i]."-".$els[$i+1]}; 
+		++$bic;
+	} 
+}
+
+my $uni = scalar keys %uni;
+my $uniA = ($uni/$unic); #." = $uni/$unic";
+
+my $bi = scalar keys %bi;
+my $biA = ($bi/$bic); #." = $bi/$bic";
+
+print "$uniA $biA\n"
