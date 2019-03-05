@@ -9,11 +9,9 @@ Before training or processing data, run `sh launch_san_docker.sh` first to enter
 
 **2)Process data (Skip this step if you jsut want to train on toy data)**
 
-* Converting the raw text file to id json file for training:
+* Converting the raw text file to id json file for training, run `sh run_preprocessing.sh`
 
-* Run `sh run_preprocessing.sh`
-
-* The output file is `/data/processed/full`. You can modify the output path by changing `--data_dir`.
+* The output_path is `/data/processed/full`. You can modify the output_path by changing `--data_dir`.
 
 
 
