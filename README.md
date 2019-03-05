@@ -14,8 +14,8 @@ Since the dataset is extracted from Reddit and web crawls, we are not able to re
 
 Notes:
 * The full data extraction pipeline may take 1-5 days, depending on compute power and internet speed;
-* In some rare cases, data extraction output might slightly differ across runs (< 0.1%) due to 503 errors caused by Common Crawl. The final version will better handle these rare cases.
+* In some rare cases, data extraction output might have slight differences across runs (< 0.1% of the data) due to 503 errors returned by the Common Crawl server. The final version will better handle these rare cases.
 
 ## Model
 
-TODO
+We provide code to train and test with the CMR model. 
