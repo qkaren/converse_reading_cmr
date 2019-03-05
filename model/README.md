@@ -34,6 +34,6 @@ This directory contains code to train and test the CMR model. We provide two exp
 
 **4) To train the model**
 
-* Run `run_san_data_weighted.sh` on toy data by fault.
+* Run `run_san_data_weighted.sh` on toy data by default.
 
 * If you want to train on full data, please modify `--data_dir` from `/data/processed/toy` to `/data/processed/full` .
