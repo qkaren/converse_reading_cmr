@@ -22,7 +22,7 @@ This directory contains code to train and test the CMR model. We provide two exp
  Regrading PyTorch versions, please refer:<br>
   `https://pytorch.org/get-started/previous-versions/`
 
-**2) Download files to large to fit as supplementary materials**
+**2) Download files too large to fit as supplementary materials**
 
   Please download this tar gzip [file](http://fake.com/url) and extract it under `model`. This should create a `model/data` folder. If you extracted in a different location, please make sure it is renamed as `model/data`.
 
