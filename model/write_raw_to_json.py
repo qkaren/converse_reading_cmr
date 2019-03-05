@@ -1,18 +1,11 @@
-"""TODO
-"""
-
 import os
 import json
-import spacy
-
-
 import pickle
 from functools import partial
 from collections import Counter
-## clean up
 from my_utils.tokenizer import Vocabulary, reform_text
 from my_utils.word2vec_utils import load_glove_vocab, build_embedding
-from my_utils.utils import set_environment
+# from my_utils.utils import set_environment
 from my_utils.log_wrapper import create_logger
 from config import set_args
 from process_raw_data import combine_files as load_reddit_data
@@ -115,7 +108,6 @@ def feature_func(sample, vocab):
     return fea_dict
 
 def tok_func(toks, vocab):
-    #return [vocab[w.text] for w in toks if len(w.text) > 0]
     return [vocab[w] for w in toks]
 
 def main():
@@ -132,7 +124,7 @@ def main():
     logger.info('{}-dim word vector path: {}'.format(args.glove_dim, args.glove))
     glove_path = args.glove
     glove_dim = args.glove_dim
-    set_environment(args.seed)
+    # set_environment(args.seed)
 
     # load data
     train_data = load_reddit_data(train_path, anc_type='section',
@@ -144,7 +136,7 @@ def main():
     logger.info('#train data: {}'.format(len(train_data)))
     logger.info('#valid data: {}'.format(len(valid_data)))
     logger.info('#test data: {}'.format(len(test_data)))
-    meta_path = os.path.join(args.data_dir, args.meta)
+    meta_path = args.meta
 
     if not os.path.exists(meta_path):
         logger.info('Build vocabulary')

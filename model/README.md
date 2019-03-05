@@ -3,7 +3,12 @@ We will clean up and document code in final version.
 ## Run the code
 
 **1)Process data**
+
+Converting the raw text file to id json file for training:
+
 * Run `sh run_preprocessing.sh`
+
+The output file is `/data`. You can modify the output data_dir by changing `--data_dir`.
 
 **2) Start Docker**
 
@@ -12,14 +17,7 @@ Before training and testing, run `sh launch_san_docker.sh` first to enter the do
 `sudo curl -sSL https://get.docker.com/ | sh`
 )
 
-**3)Test the model**
+**3)To train the model**
 
-* Download pre-trained model checkpoint from [here](https://drive.google.com/file/d/1Wm5VQriCaAF3l3C571y_XzhYp75BzZ9w/view?usp=sharing). Put the checkpoint under `./checkpoint`
-* Run `sh run_san_data_weighted.sh` to test the model
-* After running, you can find output files under './output' and './full_output' (in format for dstc evaluation)
-
-**4)To train the model**
-
-* Modify the script 'run_san_data_weighted.sh' by changing `--if_train 0` to `--if_train 1`
-* Run `sh run.sh`
+* Run 'run_san_data_weighted.sh'.
 

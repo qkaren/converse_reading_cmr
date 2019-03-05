@@ -36,7 +36,7 @@ def main():
     opt = vars(args)
     logger.info(opt)
     embedding, opt, vocab = load_meta(
-        opt, os.path.join(args.data_dir, args.meta))
+        opt, args.meta)
     max_doc = opt['max_doc']
     smooth = opt['smooth']
     is_rep = opt['is_rep']

@@ -1,2 +1,5 @@
 model/src/__pycache__
 data/src/__pycache__
+model/log/
+model/checkpoint
+model/tmp*
