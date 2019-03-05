@@ -1,40 +1,49 @@
 .SECONDARY:
 
-all: train dev valid test refs test.refs
+all: train dev test
+#all: train dev valid test refs test.refs
+
+TARGET=../model/data/raw/full
+test: $(TARGET)/test/merged.convos.txt $(TARGET)/test/merged.facts.txt
+dev: $(TARGET)/dev/merged.convos.txt $(TARGET)/dev/merged.facts.txt
+train: $(TARGET)/train/merged.convos.txt $(TARGET)/train/merged.facts.txt
 
 refs: data-official-test/test.refs.txt
-test: data-official-test/test.convos.txt data-official-test/test.facts.txt
 valid: data-official-valid/valid.convos.txt data-official-valid/valid.facts.txt
-dev: data-official/dev.convos.txt data-official/dev.facts.txt
-train: data-official/train.convos.txt data-official/train.facts.txt
 
 include src/Makefile.official.targets
 
+#data-official-test/test.convos.txt: $(OFFICIAL_TEST_CONVOS)
+$(TARGET)/test/merged.convos.txt: $(OFFICIAL_TEST_CONVOS)
+	cat $+ | sort | uniq > $@
+
+#data-official-test/test.facts.txt: $(OFFICIAL_TEST_FACTS)
+$(TARGET)/test/merged.facts.txt: $(OFFICIAL_TEST_FACTS)
+	cat $+ > $@
+
+#data-official/dev.convos.txt: $(OFFICIAL_DEV_CONVOS)
+$(TARGET)/dev/merged.convos.txt: $(OFFICIAL_DEV_CONVOS)
+	cat $+ > $@
+
+#data-official/dev.facts.txt: $(OFFICIAL_DEV_FACTS)
+$(TARGET)/dev/merged.facts.txt: $(OFFICIAL_DEV_FACTS)
+	cat $+ > $@
+
+#data-official/train.convos.txt: $(OFFICIAL_TRAIN_CONVOS)
+$(TARGET)/train/merged.convos.txt: $(OFFICIAL_TRAIN_CONVOS)
+	cat $+ > $@
+
+#data-official/train.facts.txt: $(OFFICIAL_TRAIN_FACTS)
+$(TARGET)/train/merged.facts.txt: $(OFFICIAL_TRAIN_FACTS)
+	cat $+ > $@
+
 data-official-test/test.refs.txt: $(OFFICIAL_TEST_REFS)
 	cat $+ | sort | uniq > $@
-
-data-official-test/test.convos.txt: $(OFFICIAL_TEST_CONVOS)
-	cat $+ | sort | uniq > $@
-
-data-official-test/test.facts.txt: $(OFFICIAL_TEST_FACTS)
-	cat $+ > $@
 
 data-official-valid/valid.convos.txt: $(OFFICIAL_VALID_CONVOS)
 	cat $+ | sort | uniq > $@
 
 data-official-valid/valid.facts.txt: $(OFFICIAL_VALID_FACTS)
-	cat $+ > $@
-
-data-official/dev.convos.txt: $(OFFICIAL_DEV_CONVOS)
-	cat $+ > $@
-
-data-official/dev.facts.txt: $(OFFICIAL_DEV_FACTS)
-	cat $+ > $@
-
-data-official/train.convos.txt: $(OFFICIAL_TRAIN_CONVOS)
-	cat $+ > $@
-
-data-official/train.facts.txt: $(OFFICIAL_TRAIN_FACTS)
 	cat $+ > $@
 
 test.refs: data-official-test/test.refs.txt lists/test-multiref.sets
