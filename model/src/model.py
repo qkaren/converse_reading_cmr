@@ -279,7 +279,7 @@ class DocReaderModel(object):
         ## update loss
         self.optimizer.zero_grad()
         loss.backward()
-        torch.nn.utils.clip_grad_norm(self.network.parameters(),
+        torch.nn.utils.clip_grad_norm_(self.network.parameters(),
                                       self.opt['grad_clipping'])
         self.optimizer.step()
         self.updates += 1

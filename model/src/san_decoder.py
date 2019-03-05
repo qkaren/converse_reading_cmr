@@ -74,26 +74,26 @@ class SANDecoder(nn.Module):
         if self.answer_opt in {1, 2, 3}:
             st_scores = self.attn_b(x, h0, x_mask)
             if self.answer_opt == 3:
-                ptr_net_b = torch.bmm(F.softmax(st_scores).unsqueeze(1), x).squeeze(1)
+                ptr_net_b = torch.bmm(F.softmax(st_scores, 1).unsqueeze(1), x).squeeze(1)
                 ptr_net_b = self.dropout(ptr_net_b)
                 xb = ptr_net_b if self.proj is None else self.proj(ptr_net_b)
                 end_scores = self.attn_e(x, h0 + xb, x_mask)
-                ptr_net_e = torch.bmm(F.softmax(end_scores).unsqueeze(1), x).squeeze(1)
+                ptr_net_e = torch.bmm(F.softmax(end_scores, 1).unsqueeze(1), x).squeeze(1)
                 ptr_net_in = (ptr_net_b + ptr_net_e)/2.0
             elif self.answer_opt == 2:
-                ptr_net_b = torch.bmm(F.softmax(st_scores).unsqueeze(1), x).squeeze(1)
+                ptr_net_b = torch.bmm(F.softmax(st_scores, 1).unsqueeze(1), x).squeeze(1)
                 ptr_net_b = self.dropout(ptr_net_b)
                 xb = ptr_net_b if self.proj is None else self.proj(ptr_net_b)
                 end_scores = self.attn_e(x, xb, x_mask)
-                ptr_net_e = torch.bmm(F.softmax(end_scores).unsqueeze(1), x).squeeze(1)
+                ptr_net_e = torch.bmm(F.softmax(end_scores, 1).unsqueeze(1), x).squeeze(1)
                 ptr_net_in = ptr_net_e
             elif self.answer_opt == 1:
-                ptr_net_b = torch.bmm(F.softmax(st_scores).unsqueeze(1), x).squeeze(1)
+                ptr_net_b = torch.bmm(F.softmax(st_scores, 1).unsqueeze(1), x).squeeze(1)
                 ptr_net_b = self.dropout(ptr_net_b)
                 ptr_net_in = ptr_net_b
         else:
             end_scores = self.attn_e(x, h0, x_mask)
-            ptr_net_e = torch.bmm(F.softmax(end_scores).unsqueeze(1), x).squeeze(1)
+            ptr_net_e = torch.bmm(F.softmax(end_scores, 1).unsqueeze(1), x).squeeze(1)
             ptr_net_in = ptr_net_e
 
         return ptr_net_in

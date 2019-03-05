@@ -22,7 +22,6 @@ class DNetwork(nn.Module):
         query_input_size = self.lexicon_encoder.query_input_size
         doc_input_size = self.lexicon_encoder.doc_input_size
 
-        print('Lexicon encoding size for query and doc are:{}', doc_input_size, query_input_size)
         covec_size = self.lexicon_encoder.covec_size
         embedding_size = self.lexicon_encoder.embedding_dim
 

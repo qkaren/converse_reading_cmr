@@ -1,10 +1,12 @@
 #!/bin/bash
 
 
-mkdir log
+if [ ! -d "log" ]; then
+  mkdir log
+fi
 
 CUDA_VISIBLE_DEVICES=0 \
-python3  train.py \
+python  train.py \
 --data_dir './data/processed/toy/' --train_data train.json --dev_data dev.json \
 --dev_full dev.full --test_data test.json  --test_full test.full \
 --covec_path 'data/MT-LSTM.pt' \

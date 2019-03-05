@@ -5,3 +5,5 @@ model/checkpoint
 model/tmp*
 model/*pyc*
 !model/.gitkeep
+*pyc*
+*__pycache__*

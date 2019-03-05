@@ -213,7 +213,7 @@ class AttentionWrapper(nn.Module):
             diag_mask = torch.diag(logits.data.new(logits.size(1)).zero_() + 1).byte().unsqueeze(0).expand_as(logits)
             logits.data.masked_fill_(diag_mask, -float('inf'))
 
-        prob = F.softmax(logits.view(-1, x2.size(1)))
+        prob = F.softmax(logits.view(-1, x2.size(1)), 1)
 
         prob = prob.view(-1, x1.size(1), x2.size(1))
         if self.att_dropout > 0:
@@ -242,7 +242,7 @@ class LinearSelfAttn(nn.Module):
         x_flat = x.contiguous().view(-1, x.size(-1))
         scores = self.linear(x_flat).view(x.size(0), x.size(1))
         scores.data.masked_fill_(x_mask.data, -float('inf'))
-        alpha = F.softmax(scores)
+        alpha = F.softmax(scores, 1)
 
         return alpha.unsqueeze(1).bmm(x).squeeze(1)
 
@@ -443,7 +443,6 @@ class FlatSimilarityWrapper(nn.Module):
         super(FlatSimilarityWrapper, self).__init__()
         self.score_func_str = opt.get('{}_att_type'.format(prefix), 'none').lower()
         self.att_dropout = DropoutWrapper(opt.get('{}_att_dropout'.format(prefix), 0))
-        print(self.score_func_str)
         self.score_func = None
         if self.score_func_str == 'bilinear':
             self.score_func = BilinearFlatSim(x1_dim, x2_dim, prefix=prefix, opt=opt, dropout=dropout)
