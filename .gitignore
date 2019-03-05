@@ -4,3 +4,4 @@ model/log/
 model/checkpoint
 model/tmp*
 model/*pyc*
+!model/.gitkeep
