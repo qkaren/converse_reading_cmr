@@ -1,13 +1,5 @@
 ## Run the code
 
-<<<<<<< HEAD
-**1)Setup Environment**
-
-Before training or processing data, run `sh launch_san_docker.sh` first to enter the docker.
-(if you don't have docker on your machine, please run:
-`sudo curl -sSL https://get.docker.com/ | sh`
-)
-=======
 **1) Setup Environment**
 1. python3.6
 2. install requirements:
@@ -20,15 +12,11 @@ Before training or processing data, run `sh launch_san_docker.sh` first to enter
  <br>
  **Hints:**<br>
 
- If you don't have docker on your machine, please run:<br>
-  `sudo curl -sSL https://get.docker.com/ | sh`
-
   If it is your first time to use docker, please refer the link for the usage:<br>
  `https://docs.docker.com/get-started/`
  
  Regrading PyTorch versions, please refer:<br>
   `https://pytorch.org/get-started/previous-versions/`
->>>>>>> a5891c3b6005cf0d4ee673aebd2953994b24e12d
 
 **2)Process data (Skip this step if you jsut want to train on toy data)**
 
