@@ -1,6 +1,6 @@
 ## Run the code
 
-**1) Start Docker**
+**1)Setup Environment**
 
 Before training or processing data, run `sh launch_san_docker.sh` first to enter the docker.
 (if you don't have docker on your machine, please run:
@@ -17,7 +17,7 @@ Before training or processing data, run `sh launch_san_docker.sh` first to enter
 
 **3)To train the model**
 
-* Run 'run_san_data_weighted.sh' on toy data by fault.
+* Run `run_san_data_weighted.sh` on toy data by fault.
 
 * If you want to train on full data, please modify `--data_dir` from `/data/processed/toy` to `/data/processed/full` .
 

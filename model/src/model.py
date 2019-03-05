@@ -40,7 +40,7 @@ class DocReaderModel(object):
         self.eval_embed_transfer = True
         self.train_loss = AverageMeter()
 
-        # TODO(1105)
+
         if self.opt['weight_type'] == 'bleu':
             print('Use BLEU for weighing')
             self.sentence_metric = eval_bleu.sentence_bleu
@@ -50,7 +50,7 @@ class DocReaderModel(object):
         else:
             raise ValueError('Unknown weight type {}'.format(self.opt['weight_type']))
 
-        # TODO(1105)
+
         if self.opt['model_type'] == 'san':
             encoder = DNetwork(opt, embedding)
         elif self.opt['model_type'] in {'seq2seq', 'memnet'}:
@@ -58,17 +58,14 @@ class DocReaderModel(object):
         else:
             raise ValueError('Unknown model type: {}'.format(self.opt['model_type']))
 
-        # TODO(02282019)
+
         if self.opt['model_type'] in {'seq2seq', 'memnet'}:
             self.cove_embedder = ContextualEmbed(opt['covec_path'], opt['vocab_size'], embedding=embedding)
         else:
             self.cove_embedder = None
 
-        # TODO(q)(added)
-        #decoder_hidden_size = encoder.query_understand.output_size
         decoder_hidden_size = opt['decoder_hidden_size']
         enc_dec_bridge = nn.Linear(
-            #encoder.query_understand.output_size,
             encoder.hidden_size,
             decoder_hidden_size)
 
@@ -134,8 +131,6 @@ class DocReaderModel(object):
         if opt['fix_embeddings']:
             wvec_size = 0
         else:
-            # TODO(1105)
-            #wvec_size = (opt['vocab_size'] - opt['tune_partial']) * opt['embedding_dim']
             wvec_size = 0
         if opt.get('have_lr_scheduler', False):
             if opt.get('scheduler_type', 'rop') == 'rop':
@@ -150,7 +145,7 @@ class DocReaderModel(object):
         self.total_param = sum([p.nelement() for p in parameters]) - wvec_size
 
 
-    ## TODO(0809): RNN encoder + memory
+    ##  RNN encoder + memory
     def encode_memnet(self, query, batch):
         if self.opt['cuda']:
             query = query.cuda()
@@ -169,7 +164,7 @@ class DocReaderModel(object):
 
         return mem_hidden
 
-    # TODO(02282019)
+
     def patch(self, v):
         if self.opt['cuda']:
             v = Variable(v.cuda(async=True))
@@ -182,9 +177,6 @@ class DocReaderModel(object):
         if self.opt['cuda']:
             query = query.cuda()
         query_emb = self.network.encoder.embedding(query)
-
-        # TODO(02282019)
-        #query_cove_low, query_cove_high = self.cove_embedder(self.patch(batch['query_tok']), self.patch(batch['query_mask']))
         query_cove_low, query_cove_high = self.cove_embedder(Variable(batch['query_tok']), Variable(batch['query_mask']))
         if self.opt['cuda']:
             query_cove_low = query_cove_low.cuda()
@@ -212,16 +204,12 @@ class DocReaderModel(object):
 
         w = []
         for f, r in zip(fact, res):
-            #fact_bleu = self.sentence_metric(f, r)
             f = _strip_pad(f)
             r = _strip_pad(r)
-            # fact_bleu = squad_eval.get_bleu_moses_score([f], [r])
             fact_bleu = self.sentence_metric([f], r, smooth=True)
-            # print (fact_bleu)
             fact_bleu += smooth
             w.append(fact_bleu)
-        # print("fact {}".format(fact))
-        # print("res {}".format(res))
+
         w = np.array(w)
         w = w / sum(w)
         w = w * batch_size
@@ -239,22 +227,14 @@ class DocReaderModel(object):
             doc_tok = doc_tok[:, :ans_len]
             doc_ans = torch.cat((answer_token, doc_tok), 0)
             doc_ans = Variable(doc_ans.transpose(0, 1),
-                               requires_grad=False) # TODO(q)(added)
+                               requires_grad=False)
         else:
             doc_ans = Variable(batch['answer_token'].transpose(0, 1),
-                           requires_grad=False) # TODO(q)(added)
-        # doc_ans = (torch.LongTensor(torch.from_numpy(np.ones(shape=[2, len(batch['answer_token'])], dtype=np.int64)*5)))
-        # doc_ans = Variable(doc_ans)
-        # print(doc_ans)
-        # ans_mask = Variable(batch['ans_mask'].transpose(0, 1))
+                           requires_grad=False)
         if self.opt['cuda']:
             doc_ans = doc_ans.cuda()
-            # ans_mask = ans_mask.cuda()
         doc_ans_emb = self.network.ans_embedding(doc_ans)
 
-        # TODO(q)
-        # TODO(0809)
-        # TODO(1105)
         if self.opt['model_type'] == 'san':
             doc_mem, query_mem, doc_mask = self.network.encoder(batch)
         elif self.opt['model_type'] in {'seq2seq', 'memnet'}:
@@ -270,8 +250,6 @@ class DocReaderModel(object):
 
         batch_size = query_mem.size(0)
 
-        # TODO(q)
-        #hidden = query_mem
         hidden = self.network.enc_dec_bridge(query_mem)
 
         hiddens = []
@@ -286,7 +264,6 @@ class DocReaderModel(object):
         if smooth >= 0:
             weight = self.compute_w(batch['doc_tok'],
                 batch['answer_token'][:, 1:-1], smooth, batch_size)
-            #weight = torch.FloatTensor(weight).view(-1,1,1).cuda()
             weight = np.reshape(weight, [-1, 1, 1])
             weight = torch.FloatTensor(weight).cuda()
             weight = Variable(weight, requires_grad=False)
@@ -294,13 +271,10 @@ class DocReaderModel(object):
             new_log_probs = weight * new_log_probs
             log_probs = new_log_probs.view(-1, self.opt['vocab_size'])
 
-        # TODO(q)
         target = doc_ans[1:].view(-1).data
 
         target = Variable(target, requires_grad=False)
         loss = self.network.loss_compute(log_probs, target)
-        #loss.data.masked_fill_(1 - ans_mask[1:], 0.)
-        #loss = loss.sum() / doc_ans.size(1)
         self.train_loss.update(loss.data[0], doc_ans.size(1))
         ## update loss
         self.optimizer.zero_grad()
@@ -309,9 +283,6 @@ class DocReaderModel(object):
                                       self.opt['grad_clipping'])
         self.optimizer.step()
         self.updates += 1
-
-        # TODO(q)
-        #self.reset_embeddings()
 
         self.eval_embed_transfer = True
 
@@ -322,9 +293,6 @@ class DocReaderModel(object):
         self.network.eval()
         self.network.drop_emb = False
 
-        # TODO(q)
-        # TODO(0809)
-        # TODO(1105)
         if self.opt['model_type'] == 'san':
             doc_mem, query_mem, doc_mask = self.network.encoder(batch)
         elif self.opt['model_type'] in {'seq2seq', 'memnet'}:
@@ -338,8 +306,6 @@ class DocReaderModel(object):
         else:
             raise ValueError('Unknown model type: {}'.format(self.opt['model_type']))
 
-        # TODO(q)
-        #hidden = query_mem
         hidden = self.network.enc_dec_bridge(query_mem)
 
         batch_size = query_mem.size(0)
@@ -348,7 +314,6 @@ class DocReaderModel(object):
                               requires_grad=False).cuda()
 
 
-        # TODO(1114)
         def _get_topk_tokens(log_prob, topk):
             """all except `log_prob` must be numpy
             """
@@ -356,7 +321,7 @@ class DocReaderModel(object):
             topk_tokens = log_prob_py.argsort()[:, -topk:]
             return topk_tokens
 
-        # TODO(1101)
+
         fact_py = batch['doc_tok'].numpy().tolist()
         def _delta_bleu(exist_subseq, fact, log_prob, topk):
             """all except `log_prob` must be numpy
@@ -369,7 +334,6 @@ class DocReaderModel(object):
                               for r, f in zip(exist_subseq, fact)]
 
             delta_bleu = np.zeros([batch_size, self.opt['vocab_size']])
-            # topk_tokens.shape() == [batch_size, topk]
             topk_tokens = log_prob_py.argsort()[:, -topk:]
 
             if self.opt['decoding_bleu_lambda'] > 0:
@@ -378,12 +342,7 @@ class DocReaderModel(object):
                     delta_bleu_i = _delta_bleu_core(candidate_token, exist_subseq, fact, exist_bleu)
                     delta_bleu[range(batch_size), candidate_token] = delta_bleu_i
 
-                    #print("delta_bleu topk {}".format(topk_i))
-                    #print(delta_bleu_i)
-
                 if self.opt['decoding_bleu_normalize']:
-                    ##TODO(1104) test
-                    #print('decoding_bleu_normalize')
                     delta_bleu_sum = np.sum(delta_bleu, axis=1, keepdims=True)
                     delta_bleu /= (delta_bleu_sum + 1e-7)
 
@@ -400,64 +359,39 @@ class DocReaderModel(object):
             new_bleu = [self.sentence_metric([r], f, smooth=True)
                         for r, f in zip(new_subseq, fact)]
             return np.array(new_bleu) - np.array(exist_bleu)
-        # ============
 
 
         preds = []
         pred_topks = []
-        # TOOD(1101)
         preds_np = None
-        # ==============
-        # TODO(q)
         for step in range(max_len):
-        #doc_ans = Variable(batch['answer_token'].transpose(0, 1))
-        #if self.opt['cuda']:
-        #    doc_ans = doc_ans.cuda()
-        #for next_token in torch.split(doc_ans, 1)[:-1]:
-        #    next_token = next_token.squeeze(0)
             word = self.network.ans_embedding(next_token)
             hidden = self.network.decoder(word, hidden, doc_mem, doc_mask)
             log_prob = self.network.generator(hidden)
-            # TODO(q)
             unk_id = self.opt['unk_id']
             rm_UNK = torch.cat([torch.zeros([batch_size, unk_id]),
                                 torch.ones([batch_size, 1])*-1000000,
                                 torch.zeros([batch_size, self.opt['vocab_size']-unk_id-1])], dim=1).float()
             log_prob += Variable(rm_UNK, requires_grad=False).cuda()
 
-            # TODO(q)
             if self.opt['decoding'] == 'greedy':
                 _, next_token = torch.max(log_prob, 1)
             elif self.opt['decoding'] == 'sample':
                 t = self.opt['temperature']
                 next_token = torch.multinomial(torch.exp(log_prob / t), 1, replacement=True).squeeze()
-            # TODO(1101)
+
             elif self.opt['decoding'] == 'weight':
                 delta_bleu, log_prob_topk_tokens = _delta_bleu(preds_np, fact_py, log_prob, self.opt['decoding_topk'])
-                #log_prob_topk_tokens = torch.LongTensor(log_prob_topk_tokens).cuda()
                 effective_log_prob_sum = Variable(torch.zeros([batch_size]), requires_grad=False).cuda()
-
-                #dumb_log_prob = torch.ones(log_prob.size()).cuda()*-10000000
                 dumb_log_prob = np.ones(log_prob.size())*-10000000
                 for topk_i in range(self.opt['decoding_topk']):
                     log_prob_topk_i = log_prob[torch.LongTensor(range(batch_size)).cuda(), torch.LongTensor(log_prob_topk_tokens[:, topk_i]).cuda()]
-                    #dumb_log_prob[torch.LongTensor(range(batch_size)).cuda(), log_prob_topk_tokens[:, topk_i]] = log_prob_topk_i
                     dumb_log_prob[range(batch_size), log_prob_topk_tokens[:, topk_i]] = log_prob_topk_i.data.cpu().numpy()
 
                     effective_log_prob_sum += log_prob_topk_i
-
-                    ##TODO(1104) test
-                    #print("log_prob_topk {}".format(topk_i))
-                    #print(log_prob_topk_i)
-
                 dumb_log_prob = Variable(torch.FloatTensor(dumb_log_prob), requires_grad=False).cuda()
 
                 delta_bleu_w = effective_log_prob_sum / self.opt['decoding_topk']
-
-                ##TODO(1104) test
-                #print("delta_bleu_w")
-                #print(effective_log_prob_sum / self.opt['decoding_topk'])
-
                 delta_bleu_w = delta_bleu_w.view(-1, 1)
 
                 bleu_reweight = delta_bleu_w * Variable(torch.FloatTensor(delta_bleu), requires_grad=False).cuda()
@@ -466,35 +400,27 @@ class DocReaderModel(object):
 
                 t = self.opt['temperature']
                 next_token = torch.multinomial(torch.exp(w_log_prob / t), 1, replacement=True).squeeze()
-            # ============
             else:
                 raise ValueError('Unknown decoding: %s' % self.opt['decoding'])
             preds.append(next_token.data.cpu().numpy())
 
-            #TODO(1101)
             next_token_np = next_token.data.cpu().numpy()
             next_token_np = np.reshape(next_token_np, [-1, 1])
             if preds_np is None:
                 preds_np = next_token_np
             else:
                 preds_np = np.concatenate([preds_np, next_token_np], 1)
-            # =======
 
-            #TODO(q)
             _, topk_list = torch.topk(log_prob, top_k)
             pred_topks.append(topk_list.data.cpu().numpy())
-        #TODO(q)(top)
+
         prediction_topks = [[p[i] for p in pred_topks] for i in range(batch_size)]
 
         predictions = [[p[i] for p in preds] for i in range(batch_size)]
 
-        ## TODO(1104) test
-        #print('Done')
-        #exit()
-
         return (predictions,  prediction_topks)
 
-    # TODO(q)(added)
+
     def eval_test_loss(self, batch):
         self.network.eval()
         self.network.drop_emb = False
@@ -506,7 +432,6 @@ class DocReaderModel(object):
 
         doc_ans_emb = self.network.ans_embedding(doc_ans)
 
-        # TODO(q)
         if self.opt['model_type'] == 'san':
             doc_mem, query_mem, doc_mask = self.network.encoder(batch)
         elif self.opt['model_type'] in {'seq2seq', 'memnet'}:
@@ -520,8 +445,6 @@ class DocReaderModel(object):
         else:
             raise ValueError('Unknown model type: {}'.format(self.opt['model_type']))
 
-        # TODO(q)
-        #hidden = query_mem
         hidden = self.network.enc_dec_bridge(query_mem)
 
         hiddens = []
@@ -562,9 +485,6 @@ class DocReaderModel(object):
         if self.opt['tune_partial'] > 0:
             offset = self.opt['tune_partial']
             if offset < self.network.encoder.lexicon_encoder.embedding.weight.data.size(0):
-                #print(offset)
-                #print(self.network.encoder.lexicon_encoder.embedding.weight.data.size(0))
-                #print(self.network.encoder.lexicon_encoder.fixed_embedding.size())
                 self.network.encoder.lexicon_encoder.embedding.weight.data[offset:] \
                     = self.network.encoder.lexicon_encoder.fixed_embedding
 
