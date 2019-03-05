@@ -5,18 +5,20 @@
 2. install requirements:
    > pip install -r requirements.txt
 3. You might need to download the en module for spacy
-   > python -m spacy download en              # default English model (~50MB) 
+   > python -m spacy download en              # default English model (~50MB) <br>
    > python -m spacy download en_core_web_md  # larger English model (~1GB)
    
   Or pull our published docker: allenlao/pytorch-allennlp-rt
- **Hints:**
-  If you don't have docker on your machine, please run:
+ <br>
+ **Hints:**<br>
+
+ If you don't have docker on your machine, please run:<br>
   `sudo curl -sSL https://get.docker.com/ | sh`
 
-  If it is your first time to use docker, please refer the link for the usage:
+  If it is your first time to use docker, please refer the link for the usage:<br>
  `https://docs.docker.com/get-started/`
  
- Regrading PyTorch versions, please refer:
+ Regrading PyTorch versions, please refer:<br>
   `https://pytorch.org/get-started/previous-versions/`
 
 **2)Process data (Skip this step if you jsut want to train on toy data)**
