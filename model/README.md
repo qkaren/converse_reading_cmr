@@ -24,7 +24,7 @@ This directory contains code to train and test the CMR model. We provide two exp
 
 **2) Download files too large to fit as supplementary materials**
 
-  Please download this tar gzip [file](https://drive.google.com/file/d/1HbOhLXnJo-o1-kvGLp_3DnIpDj9eqAsm/view?usp=sharing) and extract it under `model`. This should create a `model/data` folder. If you extracted in a different location, please make sure it is renamed as `model/data`.
+  Please download this tar gzip [file](https://drive.google.com/file/d/1tMCNv8COw0B3wBRkZ_7fI3h6yaSiJ0b-/view?usp=sharing) and extract it under `model`. This should create a `model/data` folder. If you extracted in a different location, please make sure it is renamed as `model/data`.
 
 **3) Process data (Skip this step if you just want to train on toy data)**
 
