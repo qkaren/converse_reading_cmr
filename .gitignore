@@ -7,3 +7,4 @@ model/*pyc*
 !model/.gitkeep
 *pyc*
 *__pycache__*
+model/my_utils/__pycache__/*
