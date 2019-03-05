@@ -18,4 +18,4 @@ Notes:
 
 ## Model
 
-We provide code to train and test with the CMR model. 
+We provide code to train and test with the CMR model, which is described in details in this [README](model/README.md).
