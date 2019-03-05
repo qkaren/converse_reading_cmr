@@ -455,7 +455,7 @@ class DocReaderModel(object):
         hiddens = torch.stack(hiddens)
         log_probs = self.network.generator(hiddens.view(-1, hiddens.size(2)))
 
-        target = doc_ans[1:].view(-1).data
+        target = doc_ans[1:].contiguous().view(-1).data
 
         target = Variable(target, requires_grad=False, volatile=True)
         loss = self.network.loss_compute(log_probs, target)
