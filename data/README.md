@@ -1,10 +1,10 @@
-# Data Extraction Pipline
+# Data Extraction Pipeline
 
 ## Overview
 
 We use conversational data extracted from Reddit. Each conversation in this setup is _grounded_, as each conversation in this data is about a specific web page that was linked at the start of the conversation. This page provides code to extract the data from a Reddit [dump](http://files.pushshift.io/reddit/comments/) and from [Common Crawl](http://commoncrawl.org/). The former data provides the conversation, while the latter offers the grounding. We provide code instead of actual data, as we are unable to directly release this data.
 
-If you run into any problem creating the data, please check the FAQ below. Otherwise, feel free to contact us at: (email address retracted for the submision.) (if so, please email us a zip file of all the log files in the `logs` directory).
+If you run into any problem creating the data, please check the FAQ below. Otherwise, feel free to contact us at: (email address retracted for the submission.) (if so, please email us a zip file of all the log files in the `logs` directory).
 
 Note: this is a relatively long page, but only the 'Requirements' and 'Data Creation' sections are really needed. The rest is supplementary materials (samples, data statistics, etc.)
 
@@ -37,7 +37,7 @@ If everything is setup properly, please run the following command to create the 
 
 ```make -j4```
 
-This will run the extraction pipeline with 4 processes. Depending on your number of cores on your machine, you might want to increase or descrease that number. This will take 2-5 days to run, depending on the number of processes selected. This will create two tab-separated (tsv) files `data/train.convos.txt` and `data/train.facts.txt`, which respectively contain the conversational data and grounded text ("facts"). This will also create two files for the dev set.
+This will run the extraction pipeline with 4 processes. Depending on your number of cores on your machine, you might want to increase or decrease that number. This will take 2-5 days to run, depending on the number of processes selected. This will create two tab-separated (tsv) files `data/train.convos.txt` and `data/train.facts.txt`, which respectively contain the conversational data and grounded text ("facts"). This will also create two files for the dev set.
 
 The data is generated from Reddit and the web, so some of it is noisy and occasionally contains offensive language. While we mostly selected Reddit boards (i.e., "subreddits") and web domains that are mostly "safe for work", explicit and offensive language sometimes appears in the data and we did not attempt to eliminate it further (for the sake of simplicity and reproducibility of our pipeline).
 
@@ -72,7 +72,7 @@ Each line of `train.convos.txt` and `dev.convos.txt` contains a Reddit response 
 6. conversational context, usually multiple turns (input of the model)
 7. response (output of the model)
 
-The converational context may contain:
+The conversational context may contain:
 * EOS: special symbol indicating a turn transition
 * START: special symbol indicating the start of the conversation
 
@@ -91,7 +91,7 @@ To produce the facts relevant to each conversation, we extracted the text of the
 
 #### Labeled anchors
 
-A substantial number of URLs contain labeled achors, for example:
+A substantial number of URLs contain labeled anchors, for example:
 
 ```http://en.wikipedia.org/wiki/John_Rhys-Davies#The_Lord_of_the_Rings_trilogy```
 

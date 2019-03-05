@@ -18,7 +18,7 @@
  Regrading PyTorch versions, please refer:<br>
   `https://pytorch.org/get-started/previous-versions/`
 
-**2)Process data (Skip this step if you jsut want to train on toy data)**
+**2)Process data (Skip this step if you just want to train on toy data)**
 
 * Converting the raw text file to id json file for training, run `sh run_preprocessing.sh`
 
