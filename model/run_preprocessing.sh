@@ -10,6 +10,3 @@ python3 write_raw_to_json.py \
     --dev_data dev.json --test_data test.json\
     --raw_data_dir './data/raw/toy/' \
     --meta './data/reddit_meta.pick'
-
-# download cove
-sh download.sh
