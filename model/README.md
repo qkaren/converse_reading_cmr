@@ -22,9 +22,9 @@ This directory contains code to train and test the CMR model. We provide two exp
  Regrading PyTorch versions, please refer:<br>
   `https://pytorch.org/get-started/previous-versions/`
 
-**2) Download files to large to fit as supplementary materials**
+**2) Download files too large to fit as supplementary materials**
 
-	Please download this [tar gzip file](http://TODO) and extract it under `model`. This should create a `model/data` folder. If you extracted in a different location, please make sure it is renamed as `model/data`.
+  Please download this tar gzip [file](https://drive.google.com/file/d/1tMCNv8COw0B3wBRkZ_7fI3h6yaSiJ0b-/view?usp=sharing) and extract it under `model`. This should create a `model/data` folder. If you extracted in a different location, please make sure it is renamed as `model/data`.
 
 **3) Process data (Skip this step if you just want to train on toy data)**
 
@@ -34,6 +34,6 @@ This directory contains code to train and test the CMR model. We provide two exp
 
 **4) To train the model**
 
-* Run `run_san_data_weighted.sh` on toy data by fault.
+* Run `run_san_data_weighted.sh` on toy data by default.
 
 * If you want to train on full data, please modify `--data_dir` from `/data/processed/toy` to `/data/processed/full` .
