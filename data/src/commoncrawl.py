@@ -3,7 +3,7 @@
 """
 commoncrawl.py
 Class to download web pages from Common Crawl, optionally specifying a target year and month.
-Author: Michel Galley, Microsoft Research NLP Group (dstc7-task2@microsoft.com)
+Author: anonymous
 """
 
 
