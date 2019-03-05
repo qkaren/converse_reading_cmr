@@ -37,8 +37,8 @@ $(TARGET)/train/merged.convos.txt: $(OFFICIAL_TRAIN_CONVOS)
 $(TARGET)/train/merged.facts.txt: $(OFFICIAL_TRAIN_FACTS)
 	cat $+ > $@
 
-data-official-test/test.refs.txt: $(OFFICIAL_TEST_REFS)
-	cat $+ | sort | uniq > $@
+#data-official-test/test.refs.txt: $(OFFICIAL_TEST_REFS)
+#	cat $+ | sort | uniq > $@
 
 data-official-valid/valid.convos.txt: $(OFFICIAL_VALID_CONVOS)
 	cat $+ | sort | uniq > $@
@@ -46,8 +46,8 @@ data-official-valid/valid.convos.txt: $(OFFICIAL_VALID_CONVOS)
 data-official-valid/valid.facts.txt: $(OFFICIAL_VALID_FACTS)
 	cat $+ > $@
 
-test.refs: data-official-test/test.refs.txt lists/test-multiref.sets
-	cat $< | python src/ids2refs.py lists/test-multiref.sets >  $@
+#test.refs: data-official-test/test.refs.txt lists/test-multiref.sets
+#	cat $< | python src/ids2refs.py lists/test-multiref.sets >  $@
 
 data-official-test/%.refs.txt: data-official-test/%.pkl lists/test-multiref.hashes
 	python src/create_official_data.py --rsinput=reddit/RS_$(*F).bz2 --rcinput=reddit/RC_$(*F).bz2 --subreddit_filter=lists/subreddits-official.txt --domain_filter=lists/domains-official.txt --pickle=data-official-test/$(*F).pkl --facts=- --convos=data-official-test/$(*F).refs.txt --anchoronly=True --use_cc=True --test=lists/test-multiref.hashes > logs/$(*F)-refs.log 2> logs/$(*F)-refs.err
