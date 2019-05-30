@@ -1,7 +1,7 @@
 # Code for "Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading"
-
+<!--
 Confidential, please do not redistribute. The code will be released under an MIT License. (What to do with this sentence?)
-
+-->
 This is the code for the following paper:
 
 Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading (put link here)
