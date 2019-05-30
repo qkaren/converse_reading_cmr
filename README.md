@@ -1,10 +1,14 @@
 # Code for "Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading"
 
-Confidential, please do not redistribute. The code will be released under an MIT License.
+Confidential, please do not redistribute. The code will be released under an MIT License. (What to do with this sentence?)
 
-This package contains two independent codebases for (1) re-creating the dataset of our experiments and (2) the CMR model described in our submission. All this code will be made publicly and freely available with the final version of our paper and will be hosted on github.
+This is the code for the following paper:
+Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading (put link here)
+Lianhui Qin, Michel Galley, Chris Brockett, Xiaodong Liu, Xiang Gao, Bill Dolan, Yejin Choi, Jianfeng Gao
 
-**Disclaimer:** *While we made significant efforts to document and test the code, this is a preliminary release and we will further improve it by the time of the final version.*
+This package contains two independent codebases for (1) re-creating the dataset of our experiments and (2) the CMR model described in the paper. All this code is made publicly and freely available with the final version of our paper and will be hosted on github.
+
+#**Disclaimer:** *While we made significant efforts to document and test the code, this is a preliminary release and we will further improve it by the time of the final version.*
 
 ## Data
 
