@@ -10,7 +10,9 @@ Lianhui Qin, Michel Galley, Chris Brockett, Xiaodong Liu, Xiang Gao, Bill Dolan,
 
 This package contains two independent codebases for (1) re-creating the dataset of our experiments and (2) the CMR model described in the paper. All this code is made publicly and freely available with the final version of our paper and will be hosted on github.
 
-#**Disclaimer:** *While we made significant efforts to document and test the code, this is a preliminary release and we will further improve it by the time of the final version.*
+<!--
+**Disclaimer:** *While we made significant efforts to document and test the code, this is a preliminary release and we will further improve it by the time of the final version.*
+-->
 
 ## Data
 
