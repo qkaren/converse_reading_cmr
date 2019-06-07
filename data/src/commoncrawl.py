@@ -3,7 +3,7 @@
 """
 commoncrawl.py
 Class to download web pages from Common Crawl, optionally specifying a target year and month.
-Author: anonymous
+Authors: Michel Galley and Sean Gao
 """
 
 
@@ -92,7 +92,7 @@ class CommonCrawl:
                 els = data.decode(enc['encoding']).strip().split('\r\n\r\n', 2)
                 if len(els) != 3:
                     idx = idx + step
-                else: 
+                else:
                     warc, header, response = els
                     date = datetime.strptime(page['timestamp'],'%Y%m%d%H%M%S')
                     return response, date
@@ -105,7 +105,7 @@ class CommonCrawl:
                         retry = 0
                     else:
                         retry += 1
-                        time.sleep(self.retry_wait) 
+                        time.sleep(self.retry_wait)
                         msg = "Common Crawl error code %d, waiting %d seconds... (retry attempt %d/%d), url: %s"
                         print(msg % (err.code, self.retry_wait, retry, self.max_retry, iurl), file=sys.stderr)
                         sys.stderr.flush()

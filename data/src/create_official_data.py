@@ -5,7 +5,7 @@ create_official_data.py
 A script to turn extract:
 (1) conversation from Reddit file dumps (originally downloaded from https://files.pushshift.io/reddit/daily/)
 (2) grounded data ("facts") extracted from the web, respecting robots.txt
-Authors: (names retracted)
+Authors: Michel Galley and Sean Gao
 """
 
 import sys
@@ -175,7 +175,7 @@ def add_live_webpage(submission):
     try:
         if args.use_robots_txt:
             if args.delay > 0:
-                time.sleep(args.delay) 
+                time.sleep(args.delay)
             if domain in robotparsers.keys():
                 rp = robotparsers[domain]
             else:
@@ -284,9 +284,9 @@ def get_comments(rc_file, submissions):
     return comments
 
 def load_data():
-    """Load data either from a pickle file if it exists, 
+    """Load data either from a pickle file if it exists,
        and otherwise from RC_* RS_* and directly from the web."""
-    if not os.path.isfile(args.pickle): 
+    if not os.path.isfile(args.pickle):
         submissions = get_submissions(args.rsinput, args.subreddit_filter, args.domain_filter)
         comments = get_comments(args.rcinput, submissions)
         with open(args.pickle, 'wb') as f:
@@ -319,7 +319,7 @@ def save_facts(submissions, sids = None):
         return submissions
     with open(args.facts, 'wt', encoding="utf-8") as f:
         for id in sorted(submissions.keys()):
-            s = submissions[id] 
+            s = submissions[id]
             url = get_url(s)
             label = get_anchor(url)
             print("Processing submission %s...\n\turl: %s\n\tanchor: %s\n\tpermalink: http://reddit.com%s" % (id, url, str(label), get_permalink(s)))
