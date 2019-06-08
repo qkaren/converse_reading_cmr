@@ -4,7 +4,7 @@ Confidential, please do not redistribute. The code will be released under an MIT
 -->
 This is the code for the following paper:
 
-Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading (put link here)
+Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading (https://arxiv.org/pdf/1906.02738.pdf)
 
 Lianhui Qin, Michel Galley, Chris Brockett, Xiaodong Liu, Xiang Gao, Bill Dolan, Yejin Choi, Jianfeng Gao
 
