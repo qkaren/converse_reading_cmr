@@ -112,8 +112,7 @@ def main():
                     bleu, bleu_fact, diver_uni, diver_bi = check(
                         model, dev_data, vocab, full_path,
                         pred_output, full_output)
-                    dev_loss = eval_test_loss(model, dev_data).data.cpu().numpy()[0]
-                    # dev_loss = dev_loss.data.cpu().numpy()[0]
+                    dev_loss = eval_test_loss(model, dev_data).data.cpu().numpy()
                     logger.info('updates[{0:6}] train: loss[{1:.5f}] ppl[{2:.5f}]\n'
                                 'dev: loss[{3:.5f}] ppl[{4:.5f}]'.format(
                       model.updates,
@@ -138,7 +137,7 @@ def main():
                     cur_eval_step += eval_step
 
                 if (i + 1) % (args.log_per_updates * 50) == 0:
-                    logger.info('have saved model as checkpoint_step_{0}_{1:.5f}.pt'
+                    logger.info('Saved model as checkpoint_step_{0}_{1:.5f}.pt'
                                 .format(model.updates, np.exp(dev_loss)))
                     model_file = os.path.join(model_dir, 'checkpoint_step_{0}_{1:.5f}.pt'
                                               .format(model.updates, np.exp(dev_loss)))
@@ -146,8 +145,8 @@ def main():
 
             #save
             dev_loss = eval_test_loss(model, dev_data)
-            dev_loss = dev_loss.data.cpu().numpy()[0]
-            logger.info('have saved model as checkpoint_epoch_{0}_{1}_{2:.5f}.pt'
+            dev_loss = dev_loss.data.cpu().numpy()
+            logger.info('Saved model as checkpoint_epoch_{0}_{1}_{2:.5f}.pt'
                         .format(epoch, args.learning_rate, np.exp(dev_loss)))
             model_file = os.path.join(model_dir, 'checkpoint_epoch_{0}_{1}_{2:.5f}.pt'
                                       .format(epoch, args.learning_rate,np.exp(dev_loss)))
@@ -167,7 +166,7 @@ def main():
             data = BatchGen(os.path.join(args.data_dir, file_path),
                                 batch_size=args.batch_size,
                                 gpu=args.cuda, is_train=False)
-            print(len(data))
+            # print(len(data))
             full_path = os.path.join(args.data_dir, full_path)
             pred_output_path = os.path.join('./output/', test_type) + '/'
             full_output_path = os.path.join('./full_output/', test_type) + '/'
@@ -181,12 +180,13 @@ def main():
             bleu, bleu_fact, diver_uni, diver_bi = \
             check(model, data, vocab, full_path, pred_output, full_output)
             _loss = eval_test_loss(model, data)
-            _loss = _loss.data.cpu().numpy()[0]
+            _loss = _loss.data.cpu().numpy()
             logger.info('dev loss[{0:.5f}] ppl[{1:.5f}]'.format(
                _loss,
                np.exp(_loss)))
-            print('{0},{1:.5f},{2:.5f},{3:.5f},{4:.5f},{5:.5f},'
-                  '{6:.5f},{7:.5f},{8:.5f}\n'.format(
+            print('DocReader Updates: {0}, Average Train Loss: {1:.5f}, e(Average Train Loss): {2:.5f},'
+                ' Eval Loss: {3:.5f}, e(Eval Loss): {4:.5f}, BLeU: {5:.5f}, '
+                  'Diversity (Uni): {6:.5f}, Diversity(Bi): {7:.5f}, BleU(fact): {8:.5f}\n'.format(
                    model.updates, model.train_loss.avg, np.exp(model.train_loss.avg), _loss, np.exp(_loss),
                    float(bleu), float(diver_uni), float(diver_bi), float(bleu_fact)))
 

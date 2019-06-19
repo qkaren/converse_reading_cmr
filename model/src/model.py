@@ -275,7 +275,7 @@ class DocReaderModel(object):
 
         target = Variable(target, requires_grad=False)
         loss = self.network.loss_compute(log_probs, target)
-        self.train_loss.update(loss.data[0], doc_ans.size(1))
+        self.train_loss.update(loss.data.item(), doc_ans.size(1))
         ## update loss
         self.optimizer.zero_grad()
         loss.backward()
@@ -425,8 +425,8 @@ class DocReaderModel(object):
         self.network.eval()
         self.network.drop_emb = False
 
-        doc_ans = Variable(batch['answer_token'].transpose(0, 1),
-                           requires_grad=False, volatile=True)
+        with torch.no_grad():
+            doc_ans = Variable(batch['answer_token'].transpose(0, 1))
         if self.opt['cuda']:
             doc_ans = doc_ans.cuda()
 
@@ -457,7 +457,8 @@ class DocReaderModel(object):
 
         target = doc_ans[1:].contiguous().view(-1).data
 
-        target = Variable(target, requires_grad=False, volatile=True)
+        with torch.no_grad():
+            target = Variable(target)
         loss = self.network.loss_compute(log_probs, target)
 
         return loss

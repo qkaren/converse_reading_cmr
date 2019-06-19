@@ -1,0 +1,5 @@
+output/*
+full_output/*
+data/*.pick
+data/*.pt
+*.tar.gz
