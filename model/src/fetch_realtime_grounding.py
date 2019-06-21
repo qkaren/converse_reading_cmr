@@ -131,8 +131,8 @@ class GroudingGenerator:
 	def get_grounding_data(self, text):
 		topics = self.topic_extraction(text)
 		url = self.get_appropriate_grounding(topics)
-		groudning = self.get_desired_content(url.content)
-		return groudning
+		grounding = self.get_desired_content(url.content)
+		return grounding
 
 
 if __name__ == "__main__":
