@@ -9,6 +9,7 @@ from config import set_args
 
 
 def pred2words(prediction, vocab):
+	EOS_token = 3
 	outputs = []
 	for pred in prediction:
 		new_pred = pred
@@ -20,7 +21,7 @@ def pred2words(prediction, vocab):
 	return outputs
 
 
-class Model:
+class InteractiveModel:
 	def __init__(self, args):
 		self.is_cuda = args.cuda
 		self.embedding, self.opt, self.vocab = load_meta(vars(args), args.meta)
@@ -31,10 +32,10 @@ class Model:
 			self.model.cuda()
 
 	def predict(self, data):
-		processed_data = prepare_batch_data([self.preprocess_data(x) for x in data])
+		processed_data = prepare_batch_data([self.preprocess_data(x) for x in data], ground_truth=False)
 		prediction, prediction_topks = self.model.predict(processed_data)
 		pred_word = pred2words(prediction, self.vocab)
-		prediction = [np.asarray(x, dtype=np.str).tolist() for x in prediction]
+		prediction = [np.asarray(x, dtype=np.str).tolist() for x in pred_word]
 		return (prediction, prediction_topks)
 
 	def preprocess_data(self, sample):
@@ -51,7 +52,13 @@ class Model:
 
 		# TODO
 		fea_dict['query_tok'] = tok_func(query_tokend)
+		fea_dict['query_pos'] = []
+		fea_dict['query_ner'] = []
+
 		fea_dict['doc_tok'] = tok_func(doc_tokend)
+		fea_dict['doc_pos'] = []
+		fea_dict['doc_ner'] = []
+		fea_dict['doc_fea'] = ''
 
 		if len(fea_dict['query_tok']) == 0:
 			fea_dict['query_tok'] = [0]
@@ -62,10 +69,13 @@ class Model:
 
 
 if __name__ == "__main__":
-	data = [{'query': "Hey there , what is up ?",
-	'fact': "When a person asks you what is up, the best reply is usually to san nm",
+	data = [{'query': "What day is it today ?",
+	'fact': "Today is Wednesday",
 	'conv_id': 42,
-	'hash_id': 42}]
+	'hash_id': 42}, {'query': "What day is it today ?",
+	'fact': "Today is Wednesday",
+	'conv_id': 42,
+	'hash_id': 42},]
 	args = set_args()
-	m = Model(args)
-	print(m.predict(data))
+	m = InteractiveModel(args)
+	print(m.predict(data)[0])

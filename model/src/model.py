@@ -87,7 +87,7 @@ class DocReaderModel(object):
         print('ans emb size: %d' % doc_mem_hidden_size)
 
         generator = nn.Sequential(nn.Linear(decoder_hidden_size, opt['vocab_size']),
-                                  nn.LogSoftmax())
+                                  nn.LogSoftmax(dim=1))
 
         loss_compute = nn.NLLLoss(ignore_index=0)
 
