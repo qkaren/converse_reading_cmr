@@ -1,11 +1,13 @@
 import pickle
 import re
-from process_raw_data import filter_query
 import torch as th
 import numpy as np
+
+from process_raw_data import filter_query
 from src.batcher import load_meta, prepare_batch_data
 from src.model import DocReaderModel
 from config import set_args
+from src.fetch_realtime_grounding import GroudingGenerator
 
 
 def pred2words(prediction, vocab):
@@ -69,13 +71,18 @@ class InteractiveModel:
 
 
 if __name__ == "__main__":
-	data = [{'query': "What day is it today ?",
-	'fact': "Today is Wednesday",
-	'conv_id': 42,
-	'hash_id': 42}, {'query': "What day is it today ?",
-	'fact': "Today is Wednesday",
-	'conv_id': 42,
-	'hash_id': 42},]
 	args = set_args()
 	m = InteractiveModel(args)
+	conversation = "hey there, what is up? I love Nokia phones."
+	# Generate grounding for given conversation
+	g = GroudingGenerator()
+	grounding = " ".join(g.get_grounding_data(conversation))
+	# Generate predictions
+	data = [{'query': conversation,
+	'fact': grounding,
+	'conv_id': 42,
+	'hash_id': 42}, {'query': conversation,
+	'fact': grounding,
+	'conv_id': 42,
+	'hash_id': 42},]
 	print(m.predict(data)[0])
