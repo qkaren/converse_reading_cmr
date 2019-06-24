@@ -395,7 +395,7 @@ def save_tuples(submissions, comments, test_hashes):
             comment = comments[id]
             user = get_user(comment)
             score = get_score(comment)
-            sid = get_linked_submission_id(comment) 
+            sid = get_linked_submission_id(comment)
             if sid in submissions.keys():
                 s = submissions[sid]
                 convo = get_convo(id, submissions, comments)

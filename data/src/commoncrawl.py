@@ -6,8 +6,6 @@ Class to download web pages from Common Crawl, optionally specifying a target ye
 Authors: Michel Galley and Sean Gao
 """
 
-
-
 import sys
 import time
 import gzip
