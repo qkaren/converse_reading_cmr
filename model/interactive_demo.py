@@ -49,9 +49,6 @@ class InteractiveModel:
 		query_tokend = sample['query']
 		doc_tokend = sample['fact']
 
-		fea_dict['uid'] = sample['conv_id']
-		fea_dict['hash_id'] = sample['hash_id']
-
 		# TODO
 		fea_dict['query_tok'] = tok_func(query_tokend)
 		fea_dict['query_pos'] = []
@@ -78,8 +75,5 @@ if __name__ == "__main__":
 	g = GroudingGenerator()
 	grounding = " ".join(g.get_grounding_data(conversation))
 	# Generate predictions
-	data = [{'query': conversation,
-	'fact': grounding,
-	'conv_id': 42,
-	'hash_id': 42}]
-	print(m.predict(data)[0][0])
+	data = [{'query': conversation, 'fact': grounding}]
+	print(m.predict(data)[0])
