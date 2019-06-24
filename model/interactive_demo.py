@@ -81,8 +81,5 @@ if __name__ == "__main__":
 	data = [{'query': conversation,
 	'fact': grounding,
 	'conv_id': 42,
-	'hash_id': 42}, {'query': conversation,
-	'fact': grounding,
-	'conv_id': 42,
-	'hash_id': 42},]
-	print(m.predict(data)[0])
+	'hash_id': 42}]
+	print(m.predict(data)[0][0])
