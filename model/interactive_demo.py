@@ -24,18 +24,21 @@ def pred2words(prediction, vocab):
 
 
 class InteractiveModel:
-	def __init__(self, args):
+	def __init__(self, args, temperature=None):
 		self.is_cuda = args.cuda
 		self.embedding, self.opt, self.vocab = load_meta(vars(args), args.meta)
+		if temperature:
+			print("Override temperature from %f to %f " % (self.opt['temperature'], temperature))
+			self.opt['temperature'] = temperature
 		self.state_dict = th.load(args.model_dir)["state_dict"]
 		self.model = DocReaderModel(self.opt, self.embedding, self.state_dict)
 		self.model.setup_eval_embed(self.embedding)
 		if self.is_cuda:
 			self.model.cuda()
 
-	def predict(self, data):
+	def predict(self, data, top_k=2):
 		processed_data = prepare_batch_data([self.preprocess_data(x) for x in data], ground_truth=False)
-		prediction, prediction_topks = self.model.predict(processed_data)
+		prediction, prediction_topks = self.model.predict(processed_data, top_k=top_k)
 		pred_word = pred2words(prediction, self.vocab)
 		prediction = [np.asarray(x, dtype=np.str).tolist() for x in pred_word]
 		return (prediction, prediction_topks)
@@ -71,20 +74,21 @@ if __name__ == "__main__":
 	import time
 	args = set_args()
 	t = time.time()
-	m = InteractiveModel(args)
+	m = InteractiveModel(args, temperature=0.8)
 	t = time.time() - t
 	print("Time taken to load model: %fs" % t)
 	conversation = "A woman fell 30,000 feet from an airplane and survived ."
 	# Generate grounding for given conversation
 	# g = GroudingGenerator()
 	# grounding = " ".join(g.get_grounding_data(conversation))
-	grounding = "In 2005, Vulović‘s fall was recreated by the American television MythBusters. \
-		Four years later, […] two Praguebased journalists, claimed that Flight 367 had been mistaken \
-		for an enemy aircraft and shot down by the Czechoslovak Air Force at an altitude of 800 metres (2,600 ft)."
+	grounding = "In 2005 , Vulović's fall was recreated by the American television program MythBusters . [22] \
+		Four years later, Peter Hornung-Andersen and Pavel Theiner , two Prague-based journalists , claimed that \
+		Flight 367 had been mistaken for an enemy aircraft and shot down by the Czechoslovak Air Force at an \
+		altitude of 800 metres (2,600 ft) ."
 	# Generate predictions
 	data = [{'query': conversation, 'fact': grounding}]
 	t = time.time()
-	prediction = m.predict(data)[0]
+	prediction = m.predict(data, top_k=20)[0]
 	t = time.time() - t
 	print("Time taken to generate predictions: %fs" % t)
 	print(prediction)
