@@ -94,7 +94,7 @@ class DocReaderModel(object):
         self.network = myNetwork(encoder, decoder, ans_embedding, generator,
                                  loss_compute, enc_dec_bridge)
         if state_dict:
-            print ('loading checkpoint model...')
+            print('loading checkpoint model...')
             new_state = set(self.network.state_dict().keys())
             for k in list(state_dict['network'].keys()):
                 if k not in new_state:
@@ -377,7 +377,7 @@ class DocReaderModel(object):
                 _, next_token = torch.max(log_prob, 1)
             elif self.opt['decoding'] == 'sample':
                 t = self.opt['temperature']
-                next_token = torch.multinomial(torch.exp(log_prob / t), 1, replacement=True).squeeze(-1)
+                next_token = torch.multinomial(torch.exp(log_prob / t), 1).squeeze(-1)
 
             elif self.opt['decoding'] == 'weight':
                 delta_bleu, log_prob_topk_tokens = _delta_bleu(preds_np, fact_py, log_prob, self.opt['decoding_topk'])
@@ -398,7 +398,7 @@ class DocReaderModel(object):
                 w_log_prob = dumb_log_prob + self.opt['decoding_bleu_lambda'] * bleu_reweight
 
                 t = self.opt['temperature']
-                next_token = torch.multinomial(torch.exp(w_log_prob / t), 1, replacement=True).squeeze(-1)
+                next_token = torch.multinomial(torch.exp(w_log_prob / t), 1).squeeze(-1)
             else:
                 raise ValueError('Unknown decoding: %s' % self.opt['decoding'])
             preds.append(next_token.data.cpu().numpy())

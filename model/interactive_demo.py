@@ -79,20 +79,15 @@ if __name__ == "__main__":
 	m = InteractiveModel(args, temperature=0.8)
 	t = time.time() - t
 	print("Time taken to load model: %.3fs" % t)
-	conversation = "A woman fell 30,000 feet from an airplane and survived ."
-	# conversation = input("Enter query: ")
+	conversation = input("Enter query: ")
 	# Generate grounding for given conversation
-	# g = GroudingGenerator()
-	# grounding = " ".join(g.get_grounding_data(conversation))
-	grounding = "In 2005 , Vulović's fall was recreated by the American television program MythBusters . [22] \
-		Four years later, Peter Hornung-Andersen and Pavel Theiner , two Prague-based journalists , claimed that \
-		Flight 367 had been mistaken for an enemy aircraft and shot down by the Czechoslovak Air Force at an \
-		altitude of 800 metres (2,600 ft) ."
-	# grounding = input("Enter grounding: ")
+	g = GroudingGenerator()
+	print("Generating grounding...")
+	grounding = " ".join(g.get_grounding_data(conversation))
 	# Generate predictions
 	data = [{'query': conversation, 'fact': grounding}]
 	t = time.time()
 	prediction = m.predict(data, top_k=20)[0][0]
 	t = time.time() - t
 	print("Time taken to generate predictions: %.3fs" % t)
-	print("Response : %s " % prediction)
+	print("Response: %s " % prediction)
