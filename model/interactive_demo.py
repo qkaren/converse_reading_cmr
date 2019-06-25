@@ -68,12 +68,23 @@ class InteractiveModel:
 
 
 if __name__ == "__main__":
+	import time
 	args = set_args()
+	t = time.time()
 	m = InteractiveModel(args)
-	conversation = "hey there, what is up? I love Nokia phones."
+	t = time.time() - t
+	print("Time taken to load model: %fs" % t)
+	conversation = "A woman fell 30,000 feet from an airplane and survived ."
 	# Generate grounding for given conversation
-	g = GroudingGenerator()
-	grounding = " ".join(g.get_grounding_data(conversation))
+	# g = GroudingGenerator()
+	# grounding = " ".join(g.get_grounding_data(conversation))
+	grounding = "In 2005, Vulović‘s fall was recreated by the American television MythBusters. \
+		Four years later, […] two Praguebased journalists, claimed that Flight 367 had been mistaken \
+		for an enemy aircraft and shot down by the Czechoslovak Air Force at an altitude of 800 metres (2,600 ft)."
 	# Generate predictions
 	data = [{'query': conversation, 'fact': grounding}]
-	print(m.predict(data)[0])
+	t = time.time()
+	prediction = m.predict(data)[0]
+	t = time.time() - t
+	print("Time taken to generate predictions: %fs" % t)
+	print(prediction)
