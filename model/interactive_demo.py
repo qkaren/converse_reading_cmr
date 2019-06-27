@@ -91,16 +91,18 @@ if __name__ == "__main__":
 	t = time.time()
 	m = InteractiveModel(args)
 	t = time.time() - t
-	print("Time taken to load model: %.3fs" % t)
-	conversation = input("Enter query: ")
-	# Generate grounding for given conversation
-	g = GroudingGenerator()
-	print("Generating grounding...")
-	grounding = " ".join(g.get_grounding_data(conversation))
-	# Generate predictions
-	data = [{'query': conversation, 'fact': grounding}]
-	t = time.time()
-	prediction = m.predict(data, top_k=args.decoding_topk)[0][0]
-	t = time.time() - t
-	print("Time taken to generate predictions: %.3fs" % t)
-	print("Response: %s " % prediction)
+	print("[LOG] Time taken to load model: %.3fs" % t)
+	grounding = input(">> Enter grounding: ")
+	conversations = []
+	for _ in range(3):
+		conversation = input(">> Enter query: ")
+		conversations.append(conversation)
+		context = "START EOS " + " EOS ".join(conversations)
+		# Generate predictions
+		data = [{'query': context, 'fact': grounding}]
+		t = time.time()
+		prediction = m.predict(data, top_k=args.decoding_topk)[0][0]
+		t = time.time() - t
+		conversations.append(prediction)
+		print("[LOG] Time taken to generate predictions: %.3fs" % t)
+		print(">> Response: %s " % prediction)
