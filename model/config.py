@@ -178,10 +178,17 @@ def train_config(parser):
     return parser
 
 
+def decoding_config(parser):
+    parser.add_argument('--skip_tokens_file', type=str, default="")
+    parser.add_argument('--skip_tokens_first_file', type=str, default="")
+    return parser
+
+
 def set_args():
     parser = argparse.ArgumentParser()
     parser = data_config(parser)
     parser = model_config(parser)
     parser = train_config(parser)
+    parser = decoding_config(parser)
     args = parser.parse_args()
     return args

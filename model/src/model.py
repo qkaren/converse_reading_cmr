@@ -359,6 +359,11 @@ class DocReaderModel(object):
                         for r, f in zip(new_subseq, fact)]
             return np.array(new_bleu) - np.array(exist_bleu)
 
+        def _remove_tokens(tokens):
+            rm_skips = torch.zeros([batch_size, self.opt['vocab_size']])
+            rm_skips[:, tokens] = -1000000
+            return Variable(rm_skips, requires_grad=False).cuda()
+
 
         preds = []
         pred_topks = []
@@ -372,6 +377,12 @@ class DocReaderModel(object):
                                 torch.ones([batch_size, 1])*-1000000,
                                 torch.zeros([batch_size, self.opt['vocab_size']-unk_id-1])], dim=1).float()
             log_prob += Variable(rm_UNK, requires_grad=False).cuda()
+
+            if self.opt['skip_tokens']:
+                log_prob += _remove_tokens(self.opt['skip_tokens'])
+
+            if self.opt['skip_tokens_first'] and step == 0:
+                log_prob += _remove_tokens(self.opt['skip_tokens_first'])
 
             if self.opt['decoding'] == 'greedy':
                 _, next_token = torch.max(log_prob, 1)

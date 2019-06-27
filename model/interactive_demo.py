@@ -1,4 +1,5 @@
 import pickle
+import os
 import re
 import torch as th
 import numpy as np
@@ -24,17 +25,29 @@ def pred2words(prediction, vocab):
 
 
 class InteractiveModel:
-	def __init__(self, args, temperature=None):
+	def __init__(self, args):
 		self.is_cuda = args.cuda
 		self.embedding, self.opt, self.vocab = load_meta(vars(args), args.meta)
-		if temperature:
-			print("Override temperature from %.2f to %.2f " % (self.opt['temperature'], temperature))
-			self.opt['temperature'] = temperature
+		self.opt['skip_tokens'] = self.get_skip_tokens(self.opt["skip_tokens_file"])
+		self.opt['skip_tokens_first'] = self.get_skip_tokens(self.opt["skip_tokens_first_file"])
 		self.state_dict = th.load(args.model_dir)["state_dict"]
 		self.model = DocReaderModel(self.opt, self.embedding, self.state_dict)
 		self.model.setup_eval_embed(self.embedding)
 		if self.is_cuda:
 			self.model.cuda()
+
+	def get_skip_tokens(self, path):
+		skip_tokens = None
+		if path and os.path.isfile(path):
+			skip_tokens = []
+			with open(path, 'r') as f:
+				for word in f:
+					word = word.strip().rstrip('\n')
+					try:
+						skip_tokens.append(self.vocab[word])
+					except:
+						print("Token %s not present in dictionary" % word)
+		return skip_tokens
 
 	def predict(self, data, top_k=2):
 		processed_data = prepare_batch_data([self.preprocess_data(x) for x in data], ground_truth=False)
@@ -76,7 +89,7 @@ if __name__ == "__main__":
 	import time
 	args = set_args()
 	t = time.time()
-	m = InteractiveModel(args, temperature=0.8)
+	m = InteractiveModel(args)
 	t = time.time() - t
 	print("Time taken to load model: %.3fs" % t)
 	conversation = input("Enter query: ")
@@ -87,7 +100,7 @@ if __name__ == "__main__":
 	# Generate predictions
 	data = [{'query': conversation, 'fact': grounding}]
 	t = time.time()
-	prediction = m.predict(data, top_k=20)[0][0]
+	prediction = m.predict(data, top_k=args.decoding_topk)[0][0]
 	t = time.time() - t
 	print("Time taken to generate predictions: %.3fs" % t)
 	print("Response: %s " % prediction)
