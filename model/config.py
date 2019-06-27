@@ -95,11 +95,11 @@ def model_config(parser):
     parser.add_argument('--decoder_mem_drop_p', type=float, default=0.2)
     parser.add_argument('--decoder_opt', type=int, default=0)
     parser.add_argument('--decoder_att_type', type=str, default='bilinear',
-                        help='bilinear/simple/defualt')
+                        help='bilinear/simple/default')
     parser.add_argument('--decoder_rnn_type', type=str, default='gru',
                         help='rnn/gru/lstm')
     parser.add_argument('--decoder_sum_att_type', type=str, default='bilinear',
-                        help='bilinear/simple/defualt')
+                        help='bilinear/simple/default')
     parser.add_argument('--decoder_weight_norm_on', action='store_true')
     return parser
 
