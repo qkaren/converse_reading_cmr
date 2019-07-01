@@ -37,3 +37,8 @@ This directory contains code to train and test the CMR model. We provide two exp
 * Run `run_san_data_weighted.sh` on toy data by default.
 
 * If you want to train on full data, please modify `--data_dir` from `/data/processed/toy` to `/data/processed/full` .
+
+## (Experimental) Interactive Model Demo
+
+Given a query to the model, the demo extracts the most relevant entity from the query, gets corresponding grounding from Wikipedia (this step currently takes some time), and then generates a responses grounded on that query.
+* Run `interactive_demo.py` with relevant configuration flags to play with the model

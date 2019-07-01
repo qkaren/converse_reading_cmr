@@ -87,14 +87,14 @@ class DocReaderModel(object):
         print('ans emb size: %d' % doc_mem_hidden_size)
 
         generator = nn.Sequential(nn.Linear(decoder_hidden_size, opt['vocab_size']),
-                                  nn.LogSoftmax())
+                                  nn.LogSoftmax(dim=1))
 
         loss_compute = nn.NLLLoss(ignore_index=0)
 
         self.network = myNetwork(encoder, decoder, ans_embedding, generator,
                                  loss_compute, enc_dec_bridge)
         if state_dict:
-            print ('loading checkpoint model...')
+            print('loading checkpoint model...')
             new_state = set(self.network.state_dict().keys())
             for k in list(state_dict['network'].keys()):
                 if k not in new_state:
@@ -309,7 +309,6 @@ class DocReaderModel(object):
         hidden = self.network.enc_dec_bridge(query_mem)
 
         batch_size = query_mem.size(0)
-
         next_token = Variable(torch.LongTensor([BOS_token] * batch_size),
                               requires_grad=False).cuda()
 
@@ -360,6 +359,11 @@ class DocReaderModel(object):
                         for r, f in zip(new_subseq, fact)]
             return np.array(new_bleu) - np.array(exist_bleu)
 
+        def _remove_tokens(tokens):
+            rm_skips = torch.zeros([batch_size, self.opt['vocab_size']])
+            rm_skips[:, tokens] = -1000000
+            return Variable(rm_skips, requires_grad=False).cuda()
+
 
         preds = []
         pred_topks = []
@@ -374,11 +378,17 @@ class DocReaderModel(object):
                                 torch.zeros([batch_size, self.opt['vocab_size']-unk_id-1])], dim=1).float()
             log_prob += Variable(rm_UNK, requires_grad=False).cuda()
 
+            if self.opt['skip_tokens']:
+                log_prob += _remove_tokens(self.opt['skip_tokens'])
+
+            if self.opt['skip_tokens_first'] and step == 0:
+                log_prob += _remove_tokens(self.opt['skip_tokens_first'])
+
             if self.opt['decoding'] == 'greedy':
                 _, next_token = torch.max(log_prob, 1)
             elif self.opt['decoding'] == 'sample':
                 t = self.opt['temperature']
-                next_token = torch.multinomial(torch.exp(log_prob / t), 1, replacement=True).squeeze()
+                next_token = torch.multinomial(torch.exp(log_prob / t), 1).squeeze(-1)
 
             elif self.opt['decoding'] == 'weight':
                 delta_bleu, log_prob_topk_tokens = _delta_bleu(preds_np, fact_py, log_prob, self.opt['decoding_topk'])
@@ -399,7 +409,7 @@ class DocReaderModel(object):
                 w_log_prob = dumb_log_prob + self.opt['decoding_bleu_lambda'] * bleu_reweight
 
                 t = self.opt['temperature']
-                next_token = torch.multinomial(torch.exp(w_log_prob / t), 1, replacement=True).squeeze()
+                next_token = torch.multinomial(torch.exp(w_log_prob / t), 1).squeeze(-1)
             else:
                 raise ValueError('Unknown decoding: %s' % self.opt['decoding'])
             preds.append(next_token.data.cpu().numpy())
