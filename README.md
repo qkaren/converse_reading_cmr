@@ -15,7 +15,7 @@ This package contains two independent codebases for (1) re-creating the dataset 
 -->
 
 ## Data
-You can download the raw data [data_file](https://drive.google.com/open?id=1tMCNv8COw0B3wBRkZ_7fI3h6yaSiJ0b-) directly. 
+You can download the raw data [data_file](https://drive.google.com/file/d/1U9F2qf7mA39bPpqcnY0VarnYDQ1ygS6e/view?usp=sharing) directly. 
 
 We also provide code to recreate our dataset. Since the raw sources to recreate the data are static (Reddit and Common Crawl dumps), this ensures the data output remains the same, making our experiments reproducible.  
 
