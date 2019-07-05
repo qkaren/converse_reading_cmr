@@ -15,8 +15,9 @@ This package contains two independent codebases for (1) re-creating the dataset 
 -->
 
 ## Data
+You can download the raw data [data_file](https://drive.google.com/open?id=1tMCNv8COw0B3wBRkZ_7fI3h6yaSiJ0b-) directly. 
 
-Since the dataset is extracted from Reddit and web crawls, we are not able to release the data directly, but we provide code to recreate our dataset. Since the raw sources to recreate the data are static (Reddit and Common Crawl dumps), this ensures the data output remains the same, making our experiments reproducible.  
+We also provide code to recreate our dataset. Since the raw sources to recreate the data are static (Reddit and Common Crawl dumps), this ensures the data output remains the same, making our experiments reproducible.  
 
 **How to run:** After moving into the `data`, data extraction consists of a single command (`make -j4`), but the [README](data/README.md) file gives details about software and packages to install and further information about the data. 
 
