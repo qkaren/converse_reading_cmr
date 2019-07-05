@@ -42,7 +42,6 @@ This directory contains code to train and test the CMR model. We provide two exp
 
  Please download this checkpoint [file](https://drive.google.com/file/d/1Wm5VQriCaAF3l3C571y_XzhYp75BzZ9w/view?usp=sharing) and extract it under `checkpoint`. Then add `--resume './checkpoint/san_checkpoint.pt` to `sh run_preprocessing.sh`
 
-
 ## (Experimental) Interactive Model Demo
 
 Given a query to the model, the demo extracts the most relevant entity from the query, gets corresponding grounding from Wikipedia (this step currently takes some time), and then generates a responses grounded on that query.
