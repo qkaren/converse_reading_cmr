@@ -37,8 +37,8 @@ $(TARGET)/train/merged.convos.txt: $(OFFICIAL_TRAIN_CONVOS)
 $(TARGET)/train/merged.facts.txt: $(OFFICIAL_TRAIN_FACTS)
 	cat $+ > $@
 
-#data-official-test/test.refs.txt: $(OFFICIAL_TEST_REFS)
-#	cat $+ | sort | uniq > $@
+data-official-test/test.refs.txt: $(OFFICIAL_TEST_REFS)
+	cat $+ | sort | uniq > $@
 
 data-official-valid/valid.convos.txt: $(OFFICIAL_VALID_CONVOS)
 	cat $+ | sort | uniq > $@
