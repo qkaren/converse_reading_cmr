@@ -33,14 +33,7 @@ We provide code to train and test with the CMR model, which is described in deta
 ```
 @inproceedings{qin-etal-2019-conversing,
     title = "Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading",
-    author = "Qin, Lianhui  and
-      Galley, Michel  and
-      Brockett, Chris  and
-      Liu, Xiaodong  and
-      Gao, Xiang  and
-      Dolan, Bill  and
-      Choi, Yejin  and
-      Gao, Jianfeng",
+    author = "Qin, Lianhui and Galley, Michel and Brockett, Chris and Liu, Xiaodong and Gao, Xiang and Dolan, Bill and Choi, Yejin and Gao, Jianfeng",
     booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
     month = jul,
     year = "2019",
