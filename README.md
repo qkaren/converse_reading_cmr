@@ -4,7 +4,7 @@ Confidential, please do not redistribute. The code will be released under an MIT
 -->
 This is the code for the following paper:
 
-[Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading](https://www.aclweb.org/anthology/P19-1539) 
+[Conversing by Reading: Contentful Neural Conversation with On-demand Machine Reading](https://www.aclweb.org/anthology/P19-1539)                         
 *Lianhui Qin, Michel Galley, Chris Brockett, Xiaodong Liu, Xiang Gao, Bill Dolan, Yejin Choi, Jianfeng Gao; ACL 2019*
 
 This package contains two independent codebases for (1) re-creating the dataset of our experiments and (2) the CMR model described in the paper. All this code is made publicly and freely available with the final version of our paper and will be hosted on github.
@@ -35,7 +35,7 @@ We provide code to train and test with the CMR model, which is described in deta
     author = "Qin, Lianhui and Galley, Michel and Brockett, Chris and Liu, Xiaodong 
               and Gao, Xiang and Dolan, Bill and Choi, Yejin and Gao, Jianfeng",
     booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
-    month = jul,
+    month = "jul",
     year = "2019",
     address = "Florence, Italy",
     publisher = "Association for Computational Linguistics",
