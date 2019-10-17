@@ -20,9 +20,10 @@ For the purpose of reproducbility, we also provide code to recreate our dataset 
 
 **How to run:** After moving into the `data`, data extraction consists of a single command (`make -j4`), but the [README](data/README.md) file gives details about software and packages to install and further information about the data. 
 
-Notes:
+**Notes:**
 * The full data extraction pipeline may take 1-5 days, depending on compute power and internet speed;
 * In some rare cases, data extraction output might have slight differences across runs (< 0.1% of the data) due to 503 errors returned by the Common Crawl server. The final version will better handle these rare cases.
+* If you have trouble creating the test set ground-truth from the raw data, please contact me for the processed test set.
 
 ## Model
 
