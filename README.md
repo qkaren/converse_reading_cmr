@@ -23,7 +23,10 @@ For the purpose of reproducbility, we also provide code to recreate our dataset 
 **Notes:**
 * The full data extraction pipeline may take 1-5 days, depending on compute power and internet speed;
 * In some rare cases, data extraction output might have slight differences across runs (< 0.1% of the data) due to 503 errors returned by the Common Crawl server. The final version will better handle these rare cases.
-* If you have trouble creating the test set ground-truth from the raw data, please contact me for the processed test set.
+
+## Evaluation
+
+The test data and evaluation scripts are under [evaluation/](./evaluation). The [README](./evaluation/README.md) file gives the details.
 
 ## Model
 
