@@ -38,7 +38,7 @@ To create a system output for evaluation, keep the ``test.convos.txt`` and relac
 
 ## Evaluation script:
 
-**Note: The script (which is used in the paper) sub-samples a subset of the test data for evaluation.**
+**Note: The script (which is used in the paper) <span style="color: red">  sub-samples a subset </span>of the test data for evaluation.**
 
 Steps:
 1) Make sure you 'git pull' the latest changes, including changes in ../data.
