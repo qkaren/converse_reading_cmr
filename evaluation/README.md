@@ -1,5 +1,7 @@
 # Evaluation
 
+*Note that this setup is borrowed from the [DSTC7 Task2 evaluation](https://github.com/mgalley/DSTC7-End-to-End-Conversation-Modeling) and some the instructions or script might refer to dates of that campaign, but the scripts within this folder are self-contained and should still work after DSTC7.*
+
 ## Requirements
 * Works fine for both Python 2.7 and 3.6
 * Please **downloads** the following 3rd-party packages and save in a new folder `3rdparty`:
@@ -34,7 +36,7 @@ Due to the way the data is created by querying Common Crawl, there may be small 
 
 ## Prepare your system output for evaluation:
 
-To create a system output for evaluation, keep the ``test.convos.txt`` and relace ``__UNDISCLOSED__`` with your own system output.
+To create a system output for evaluation, keep the ``test.convos.txt`` and relace ``__UNDISCLOSED__`` with your own system output. Call that new file ``system_output.txt``.
 
 ## Evaluation script:
 
@@ -44,9 +46,7 @@ Steps:
 1) Make sure you 'git pull' the latest changes, including changes in ../data.
 2) cd to `../data` and type make. This will create the multi-reference file used by the metrics (`../data/test.refs`).
 3) Install 3rd party software as instructed above (METEOR and mteval-v14c.pl).
-5) Run the following command, where `[SUBMISSION]` is the submission file you want to evaluate: (same format as the one you submitted on Oct 8.)
+5) Run the following command, where `system_output.txt` is the file you want to evaluate: (i.e., created as instructed above).
 ```
-python dstc.py -c [SUBMISSION] --refs ../data/test.refs
+python dstc.py -c system_output.txt --refs ../data/test.refs
 ```
-
-Important: the results printed by dstc.py might differ slightly from the official results, if part of your test set failed to download.
