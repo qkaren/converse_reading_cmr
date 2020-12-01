@@ -1,5 +1,7 @@
 # Evaluation
 
+*Please note that it is important thay you run the evaluation scripts exactly as mentioned below. In particular, the dstc.py script internally uses a key file that restricts evaluation to the multi-reference subset of the test set, so you might get completely different results if evaluating performance on the full test set (which contains both single- and multi-reference instances).*
+
 *Note that this setup is borrowed from the [DSTC7 Task2 evaluation](https://github.com/mgalley/DSTC7-End-to-End-Conversation-Modeling) and some the instructions or script might refer to dates of that campaign, but the scripts within this folder are self-contained and should still work after DSTC7.*
 
 ## Requirements
